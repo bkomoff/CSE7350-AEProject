@@ -159,6 +159,7 @@
     <ClInclude Include="Course.h" />
     <ClInclude Include="CourseDistribution.h" />
     <ClInclude Include="ExecutionTimer.h" />
+    <ClInclude Include="HashTable.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SectionConflictResolver.h" />
     <ClInclude Include="SectionCreator.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Course.cpp" />
     <ClCompile Include="CourseDistribution.cpp" />
     <ClCompile Include="CSE7350-Project.cpp" />
+    <ClCompile Include="HashTable.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

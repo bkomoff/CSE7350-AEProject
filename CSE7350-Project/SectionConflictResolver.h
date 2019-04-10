@@ -1,5 +1,8 @@
 #pragma once
+
+#include <list>
 #include <vector>
+
 
 class Course;
 class Student;
@@ -7,10 +10,10 @@ class Student;
 class SectionConflictResolver
 {
 	public:
-		SectionConflictResolver(std::vector<Course*> courses);
+		SectionConflictResolver(std::vector<Course*> &courses);
 		~SectionConflictResolver();
 
-		int CountConflicts(std::vector<Student*> students);
+		int CountDistinctConflicts(std::vector<Student*> &students);
 
 	private:
 		struct Node
@@ -19,5 +22,6 @@ class SectionConflictResolver
 			int course;
 		};
 
-		std::vector<Node> nodes;
+		Node *verticies;
+		std::vector< std::list<std::pair<Node,Node>>> edges;
 };

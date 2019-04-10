@@ -74,19 +74,20 @@ int main()
 		break;
 	}
 
-	for (const auto st : students)
-	{
-		cout << "Student: " << st->GetStudentId() << endl;
-		for (const auto it : st->GetCourseList())
-		{
-			cout << "Course: " << it->GetCourseID() << "(" << it << ")" << " Section: " << it->GetSectionID() << endl;
-		}
-	}
+	//for (const auto st : students)
+	//{
+	//	cout << "Student: " << st->GetStudentId() << endl;
+	//	for (const auto it : st->GetCourseList())
+	//	{
+	//		cout << "Course: " << it->GetCourseID() << "(" << it << ")" << " Section: " << it->GetSectionID() << endl;
+	//	}
+	//}
 
 	// 2) Sort Courses into sections
 	SectionCreator creator;
 	creator.SimpleSectionSplit(courses, static_cast<int>(sectionSize * 0.66), static_cast<int>(sectionSize * 1.33));
 
+	SectionConflictResolver resolver(courses);
 
 	OutputResults(numberOfStudents,
 				  numberOfCourses,

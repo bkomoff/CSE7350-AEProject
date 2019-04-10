@@ -12,9 +12,7 @@ SectionCreator::SectionCreator()
 SectionCreator::~SectionCreator()
 {}
 
-void SectionCreator::SimpleSectionSplit(std::vector<Course*> &courses,
-										int minSectionSize,
-										int maxSectionSize)
+void SectionCreator::SimpleSectionSplit(std::vector<Course*> &courses, int minSectionSize, int maxSectionSize)
 {
 	ExecutionTimer<std::chrono::milliseconds> timer;
 	for (int i = 0; i < courses.size(); i++)
@@ -51,4 +49,8 @@ void SectionCreator::SimpleSectionSplit(std::vector<Course*> &courses,
 		}
 	}
 	timer.stop();
+}
+
+void SectionCreator::AdvanceSectionSplit(std::vector<Course*> &courses, int minSectionSize, int maxSectionSize)
+{
 }

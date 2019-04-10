@@ -12,4 +12,8 @@ class SectionCreator
 		void SimpleSectionSplit(std::vector<Course*> &courses,
 			int minSectionSize,
 			int maxSectionSize);
+
+		void AdvanceSectionSplit(std::vector<Course*> &courses,
+			int minSectionSize,
+			int maxSectionSize);
 };
