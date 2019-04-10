@@ -53,4 +53,38 @@ void SectionCreator::SimpleSectionSplit(std::vector<Course*> &courses, int minSe
 
 void SectionCreator::AdvanceSectionSplit(std::vector<Course*> &courses, int minSectionSize, int maxSectionSize)
 {
+	ExecutionTimer<std::chrono::milliseconds> timer;
+	for (int i = 0; i < courses.size(); i++)
+	{
+		if (courses[i]->GetNumberOfStudents() > maxSectionSize)
+		{
+			int numberOfSections = courses[i]->GetNumberOfStudents() / minSectionSize;
+			int numberOfStudentsPerSection = courses[i]->GetNumberOfStudents() / numberOfSections;
+
+			for (int t = 1; t < numberOfSections; t++)
+			{
+				courses.push_back(new Course(t, courses[i]->GetCourseID()));
+			}
+
+			int currentSectionSize = 0;
+			for (auto &st : courses[i]->GetStudentList())
+			{
+				// Randomly place them in a section
+				std::random_device rand_dev;
+				std::mt19937 generator(rand_dev());
+				std::uniform_int_distribution<> dis(0, numberOfSections);
+
+				int sectionNumber = dis(generator);
+
+				// If section number is 0 then they stay in course
+				if (sectionNumber > 0)
+				{
+
+				}
+
+			}
+		}
+	}
+	timer.stop();
+
 }
