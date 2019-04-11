@@ -3,7 +3,6 @@
 #include <list>
 #include <vector>
 
-
 class Course;
 class Student;
 
@@ -14,6 +13,8 @@ class SectionConflictResolver
 		~SectionConflictResolver();
 
 		int CountDistinctConflicts(std::vector<Student*> &students);
+		void CreateAdjancenyList(std::vector<Student*> &students);
+		void PrintNodes();
 
 	private:
 		struct Node
@@ -22,6 +23,7 @@ class SectionConflictResolver
 			int course;
 		};
 
+		int numberOfCourses;
 		Node *verticies;
 		std::vector< std::list<std::pair<Node,Node>>> edges;
 };

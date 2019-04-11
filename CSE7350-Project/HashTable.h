@@ -1,34 +1,36 @@
 #pragma once
 
+template<typename K, typename V>
 class HashNode
 {
 	public:
-		HashNode(int key, int value)
+		HashNode(K key, V value)
 		{
 			this->key = key;
 			this->value = value;
 		}
 
-		int GetKey() const { return this->key; }
-		int GetValue() const { return this->value; }
+		K GetKey() const { return this->key; }
+		V GetValue() const { return this->value; }
 
 	private:
-		int value;
-		int key;
+		K key;
+		V value;
 };
 
+template<typename K, typename V>
 class HashMap
 {
 	public:
 		HashMap(int size);
 
-		int GetHashKey(int k) const { return k % size;  }
-		void InsertNode(int key, int value);
-		int GetValue(int key);
+		int GetHashKey(K k) const { return k % size;  }
+		void InsertNode(K key, V value);
+		int GetValue(K key);
 
 	private:
 		int size;
-		HashNode **node;
+		HashNode<K,V> **node;
 
 };
 

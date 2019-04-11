@@ -1,8 +1,6 @@
 // CSE7350-Project.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
 #include "pch.h"
-#include <iostream>
 
 #include "Course.h"
 #include "CourseDistribution.h"
@@ -88,17 +86,26 @@ int main()
 	creator.SimpleSectionSplit(courses, static_cast<int>(sectionSize * 0.66), static_cast<int>(sectionSize * 1.33));
 
 	SectionConflictResolver resolver(courses);
+	resolver.PrintNodes();
 
-	OutputResults(numberOfStudents,
-				  numberOfCourses,
-				  numberOfCoursesPerStudent,
-				  sectionSize,
-				  whichDistribution,
-				  1);
+	//OutputResults(numberOfStudents,
+	//			  numberOfCourses,
+	//			  numberOfCoursesPerStudent,
+	//			  sectionSize,
+	//			  whichDistribution,
+	//			  1);
 
+	for (const auto st : students)
+	{
+		cout << "Student: " << st->GetStudentId() << endl;
+		for (const auto it : st->GetCourseList())
+		{
+			cout << "Section: " << it->GetSectionID() << " Course: " << it->GetCourseID() << endl;
+		}
+	}
 	//for (const auto it : courses)
 	//{
-	//	cout << "Course: " << it->GetCourseID() << "(" << it << ")" <<  " Section: " << it->GetSectionID() << endl;
+	//	cout << "Course: " << it->GetCourseID() <<  " Section: " << it->GetSectionID() << endl;
 	//	for (const auto st : it->GetStudentList())
 	//	{
 	//		cout << "Student: " << st->GetStudentId() << endl;

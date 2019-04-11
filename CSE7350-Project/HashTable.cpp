@@ -2,20 +2,22 @@
 
 #include "HashTable.h"
 
- HashMap::HashMap(int size)
+template<typename K, typename V>
+ HashMap<K,V>::HashMap(int size)
 {
 	 size = size;
 
 	 node = new HashNode*[size];
 
-	 for (int i = 0; i < initialCapacity; i++)
+	 for (int i = 0; i < size; i++)
 	 {
 		 node[i] = NULL;
 	 }
 
 }
 
- void HashMap::InsertNode(int key, int value)
+ template<typename K, typename V>
+ void HashMap<K, V>::InsertNode(K key, V value)
  {
 	 int hash = (key % size);
 
@@ -32,7 +34,8 @@
 	 node[hash] = new HashNode(key, value);
  }
 
- int HashMap::GetValue(int key)
+ template<typename K, typename V>
+ int HashMap<K, V>::GetValue(K key)
  {
 	 int hash = (key % size);
 
