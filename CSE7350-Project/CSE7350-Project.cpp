@@ -19,7 +19,8 @@ void OutputResults(int numberOfStudents,
 	               int numberOfCoursesPerStudent,
 	               int sectionSize,
 				   int distribution,
-	               int split);
+	               int split,
+				   int distinctConflicts);
 
 int main()
 {
@@ -86,23 +87,24 @@ int main()
 	creator.SimpleSectionSplit(courses, static_cast<int>(sectionSize * 0.66), static_cast<int>(sectionSize * 1.33));
 
 	SectionConflictResolver resolver(courses);
-	resolver.PrintNodes();
+	int distinctConflicts = resolver.CountDistinctConflicts(students);
 
-	//OutputResults(numberOfStudents,
-	//			  numberOfCourses,
-	//			  numberOfCoursesPerStudent,
-	//			  sectionSize,
-	//			  whichDistribution,
-	//			  1);
+	OutputResults(numberOfStudents,
+				  numberOfCourses,
+				  numberOfCoursesPerStudent,
+				  sectionSize,
+				  whichDistribution,
+				  1,
+			      distinctConflicts);
 
-	for (const auto st : students)
-	{
-		cout << "Student: " << st->GetStudentId() << endl;
-		for (const auto it : st->GetCourseList())
-		{
-			cout << "Section: " << it->GetSectionID() << " Course: " << it->GetCourseID() << endl;
-		}
-	}
+	//for (const auto st : students)
+	//{
+	//	cout << "Student: " << st->GetStudentId() << endl;
+	//	for (const auto it : st->GetCourseList())
+	//	{
+	//		cout << "Section: " << it->GetSectionID() << " Course: " << it->GetCourseID() << endl;
+	//	}
+	//}
 	//for (const auto it : courses)
 	//{
 	//	cout << "Course: " << it->GetCourseID() <<  " Section: " << it->GetSectionID() << endl;
@@ -140,7 +142,8 @@ void OutputResults(int numberOfStudents,
 				   int numberOfCoursesPerStudent,
 				   int sectionSize,
 				   int distribution,
-	               int split)
+	               int split,
+				   int distinctConflicts)
 {
 	cout << "Final Results: " << endl;
 	cout << "    Numer Of Students: " << numberOfStudents << endl;
@@ -184,7 +187,7 @@ void OutputResults(int numberOfStudents,
 		break;
 	}
 
-	cout << "    Numer Of Distinct Pair-Wise Section Conflicts: 0" << endl;
+	cout << "    Numer Of Distinct Pair-Wise Section Conflicts: " << distinctConflicts << endl;
 	int conflicts = numberOfCoursesPerStudent * (numberOfCoursesPerStudent - 1);
 	int total = conflicts / 2;
 	cout << "    Numer Of Total Pair-Wise Section Conflicts: " << numberOfStudents * total <<endl;

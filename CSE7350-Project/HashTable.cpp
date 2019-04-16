@@ -2,28 +2,28 @@
 
 #include "HashTable.h"
 
-template<typename K, typename V>
- HashMap<K,V>::HashMap(int size)
+ HashMap::HashMap(int size)
 {
-	 size = size;
+	 hashSize = size;
 
-	 node = new HashNode*[size];
+	 node = new HashNode*[hashSize];
 
-	 for (int i = 0; i < size; i++)
+	 for (int i = 0; i < hashSize; i++)
 	 {
 		 node[i] = NULL;
 	 }
 
 }
 
- template<typename K, typename V>
- void HashMap<K, V>::InsertNode(K key, V value)
+ void HashMap::InsertNode(int key, int value)
  {
-	 int hash = (key % size);
+	 HashNode *temp = new HashNode(key, value);
+
+	 int hash = (key % hashSize);
 
 	 while (node[hash] != NULL && node[hash]->GetKey() != key)
 	 {
-		 hash = (hash + 1) % size;
+		 hash = (hash + 1) % hashSize;
 	 }
 
 	 if (node[hash] != NULL)
@@ -31,17 +31,16 @@ template<typename K, typename V>
 		 delete node[hash];
 	 }
 
-	 node[hash] = new HashNode(key, value);
+	 node[hash] = temp;
  }
 
- template<typename K, typename V>
- int HashMap<K, V>::GetValue(K key)
+ int HashMap::GetValue(int key)
  {
-	 int hash = (key % size);
+	 int hash = (key % hashSize);
 
 	 while (node[hash] != NULL && node[hash]->GetKey() != key && node[hash]->GetKey() != -1)
 	 {
-		 hash = (hash + 1) % size;
+		 hash = (hash + 1) % hashSize;
 	 }
 
 	 int hashValue = -1;

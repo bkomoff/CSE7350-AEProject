@@ -14,8 +14,8 @@ SectionConflictResolver::SectionConflictResolver(std::vector<Course*> &courses)
 	verticies = new Node[numberOfCourses];
 	for (int i = 0; i < numberOfCourses; i++)
 	{
-		verticies[i].course  = 0;
-		verticies[i].section = 0;
+		verticies[i].sectionCourse  = 0;
+		verticies[i].prev = NULL;
 	}
 
 	std::vector<Course*>::iterator it,
@@ -24,8 +24,12 @@ SectionConflictResolver::SectionConflictResolver(std::vector<Course*> &courses)
 	for (it = courses.begin(); it != itEnd; it++, i++)
 	{
 		Course *current = *it;
-		verticies[i].course = current->GetCourseID();
-		verticies[i].section = current->GetSectionID();
+		verticies[i].sectionCourse = CombieInts(current->GetSectionID(), current->GetCourseID());
+
+		if ( i > 0 )
+		{ 
+			verticies[i].prev = &verticies[i - 1];
+		}
 	}
 }
 
@@ -36,21 +40,35 @@ int SectionConflictResolver::CountDistinctConflicts(std::vector<Student*> &stude
 {
 	int numberOfDistinctSectionConflicts = 0;
 
+	HashMap *hash = new HashMap(numberOfCourses);
+
 	ExecutionTimer<std::chrono::milliseconds> timer;
-	// Student A {0,0}, {1,1}, {0,2} ({0,0} - {1,1} {0,0} - {0,2} {1,1} - {0,2})
-	// Student B {1,0}, {1,1}, {0,2} ({1,0} - {1,1} {1,0} - {0,2} {1,1} - {0,2})
+	// Student A {0}, {11}, {2} ({0} - {11}, {0} - {2}, {11} - {2})
+	// Student B {10}, {11}, {2} ({10} - {11}, {10} - {2}, {11} - {2})
 	// 6 Total Conflicts
 	// 5 Distinct Conflicts
 
-	for (auto st : students)
+	std::vector<Student*>::iterator st,
+								   stEnd = students.end();
+	for ( st = students.begin(); st != stEnd; ++st )
 	{
-		int numberOfCourses = st->GetNumberOfCourses();
-		int index = 0;
-		std::vector<Course*>::iterator it,
-									   itEnd = st->GetCourseList().end();
-		for (it = st->GetCourseList().begin(); it != itEnd; ++it)
+		Student *currentStudent = *st;
+	
+		int index = 1;
+		for (int courses = 0; courses < currentStudent->GetNumberOfCourses(); courses++ )
 		{
+			for (int i = index; i < currentStudent->GetNumberOfCourses(); i++)
+			{
+				int section = CombieInts(currentStudent->GetCourseList().at(courses)->GetSectionID(), currentStudent->GetCourseList().at(courses)->GetCourseID());
 
+				if (hash->GetValue(hash->GetHashKey(section)) == -1)
+				{ 
+					int nextSection = CombieInts(currentStudent->GetCourseList().at(i)->GetSectionID(), currentStudent->GetCourseList().at(i)->GetCourseID());
+					hash->InsertNode(section, nextSection);
+					numberOfDistinctSectionConflicts++;
+				}
+			}
+			index++;
 		}
 	}
 
@@ -70,7 +88,11 @@ void SectionConflictResolver::PrintNodes()
 {
 	for (int i = 0; i < numberOfCourses; i++)
 	{
-		std::cout << "{" << verticies[i].section << "," << verticies[i].course << "}" << std::endl;
+		std::cout << "{" << verticies[i].sectionCourse << "}" << std::endl;
 	}
+}
+
+void SectionConflictResolver::AddEdge(Node origin, Node dest)
+{
 }
 
