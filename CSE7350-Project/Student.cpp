@@ -4,7 +4,7 @@
 
 #include "Student.h"
 
-Student::Student(int id):
+Student::Student(int id) :
 	studentID(id)
 {}
 

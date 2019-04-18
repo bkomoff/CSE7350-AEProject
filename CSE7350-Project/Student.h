@@ -6,7 +6,7 @@ class Course;
 class Student
 {
 	public:
-		Student(int id);
+		Student(int number);
 		~Student();
 		
 		int GetStudentId() const { return studentID; }

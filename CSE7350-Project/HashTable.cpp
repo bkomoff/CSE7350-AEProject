@@ -15,40 +15,58 @@
 
 }
 
- void HashMap::InsertNode(int key, int value)
+ void HashMap::InsertNode(int  key, int value)
  {
-	 HashNode *temp = new HashNode(key, value);
-
 	 int hash = (key % hashSize);
 
-	 while (node[hash] != NULL && node[hash]->GetKey() != key)
+	 if (node[hash] == NULL)
 	 {
-		 hash = (hash + 1) % hashSize;
+		 node[hash] = new HashNode(key, value);
 	 }
-
-	 if (node[hash] != NULL)
+	 else 
 	 {
-		 delete node[hash];
-	 }
+		 HashNode *entry = node[hash];
 
-	 node[hash] = temp;
+		 while (entry->GetNext() != NULL)
+		 {
+			 entry = entry->GetNext();
+		 }
+
+		 if (entry->GetKey() == key)
+		 {
+			 entry->SetValue(value);
+		 }
+		 else
+		 {
+			 entry->SetNext(new HashNode(key, value));
+		 }
+	 }
  }
 
- int HashMap::GetValue(int key)
+ int HashMap::GetValue(int  key)
  {
 	 int hash = (key % hashSize);
 
-	 while (node[hash] != NULL && node[hash]->GetKey() != key && node[hash]->GetKey() != -1)
+	 HashNode *entry = node[hash];
+
+	 if (entry == NULL)
 	 {
-		 hash = (hash + 1) % hashSize;
+		 return -1;
 	 }
-
-	 int hashValue = -1;
-
-	 if (node[hash] != NULL)
+	 else 
 	 {
-		 hashValue = node[hash]->GetValue();
-	 }
+		 while (entry != NULL && entry->GetKey() != key)
+		 {
+			 entry = entry->GetNext();
+		 }
 
-	 return hashValue;
+		 if (entry == NULL)
+		 {
+			 return -1;	
+		 }
+		 else
+		 {
+			 return entry->GetValue();
+		 }
+	 }
  }

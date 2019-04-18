@@ -11,22 +11,28 @@ class SectionConflictResolver
 	private:
 		struct Node
 		{
-			int sectionCourse;
-			Node *prev;
+			int course;
+			Node *next;
 		};
 
+		struct NodeList
+		{
+			Node *head;
+		};
+
+
+		void AddEdge(int src, int dest);
+		Node *CreateNode(int sectionCourse);
+
 	public:
-		SectionConflictResolver(std::vector<Course*> &courses);
+		SectionConflictResolver(int courses);
 		~SectionConflictResolver();
 
 		int CountDistinctConflicts(std::vector<Student*> &students);
-		void CreateAdjancenyList(std::vector<Student*> &students);
+		void CreateAdjancencyList(std::vector<Student*> &students);
 		void PrintNodes();
 
 	private:
-
-		void AddEdge(Node origin, Node dest);
-
 		int numberOfCourses;
 
 		int CombieInts(int a, int b)
@@ -41,6 +47,5 @@ class SectionConflictResolver
 			return a * times + b;
 		}
 
-
-		Node *verticies;
+		NodeList *verticies;
 };
