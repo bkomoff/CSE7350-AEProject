@@ -6,19 +6,20 @@ class Student;
 class Course
 {
 	public:
-		Course(int section, int course);
-		~Course();
+		Course() { numberOfStudents = 0; };
+		~Course() {};
 
+		void SetSectionID(int id) { sectionID = id; }
 		int GetSectionID() const { return sectionID; }
+		void SetCourseID(int id) { courseID = id; }
 		int GetCourseID() const { return courseID; }
-		int GetNumberOfStudents() const { return students.size(); }
-		std::vector<Student*> GetStudentList() const { return students; }
+		int GetNumberOfStudents() const { return numberOfStudents; }
 
-		void AddStudent(Student &s);
-		void RemoveStudent(Student &s);
+		void AddStudent() { numberOfStudents++; }
+		void RemoveStudent() { numberOfStudents--; }
 
 	private:
 		int courseID;
 		int sectionID;
-		std::vector<Student*> students;
+		int numberOfStudents;
 };

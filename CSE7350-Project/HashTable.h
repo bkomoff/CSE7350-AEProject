@@ -3,36 +3,36 @@
 class HashNode
 {
 	public:
-		HashNode(int  key, int value)
+		HashNode(size_t  key, size_t value)
 		{
 			this->key = key;
 			this->value = value;
 			this->nextHashNode = NULL;
 		}
 
-		int  GetKey() const { return this->key; }
-		int GetValue() const { return this->value; }
-		void SetValue(int value) { value = this->value; }
+		size_t  GetKey() const { return this->key; }
+		size_t GetValue() const { return this->value; }
+		void SetValue(size_t value) { value = this->value; }
 		HashNode *GetNext() { return this->nextHashNode;  }
 		void SetNext(HashNode *node) { nextHashNode = node; }
 
 	private:
-		int  key;
-		int value;
+		size_t  key;
+		size_t value;
 		HashNode *nextHashNode;
 };
 
 class HashMap
 {
 	public:
-		HashMap(int size);
+		HashMap(size_t size);
 
-		int GetHashKey(int  k) const { return k % hashSize;  }
-		void InsertNode(int  key, int value);
-		int GetValue(int  key);
+		size_t GetHashKey(size_t  k) const { return k % hashSize;  }
+		void InsertNode(size_t  key, size_t value);
+		size_t GetValue(size_t  key);
 
 	private:
-		int hashSize;
+		size_t hashSize;
 		HashNode **node;
 
 };

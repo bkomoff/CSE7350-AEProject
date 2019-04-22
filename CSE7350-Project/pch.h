@@ -12,6 +12,8 @@
 // TODO: add headers that you want to pre-compile here
 #include <iostream>
 #include <random>
+#include <stdlib.h>
+#include <time.h>	
 #include <vector>
 
 #endif //PCH_H

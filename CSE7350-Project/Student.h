@@ -6,17 +6,24 @@ class Course;
 class Student
 {
 	public:
-		Student(int number);
+		Student();
 		~Student();
 		
-		int GetStudentId() const { return studentID; }
-		int GetNumberOfCourses() const { return courses.size(); }
-		std::vector<Course*> GetCourseList() const { return courses; }
+		void EnrollStudent(int id, int courses);
 
-		bool AddCourse(Course &c);
-		void RemoveCourse(Course &c);
+		int GetStudentId() const { return studentID; }
+		int GetNumberOfCourses() const { return numberOfCourses; }
+		int GetNumberOfCoursesPerStudent() const { return coursesPerStudent; }
+		Course *GetCourseList() const { return currentCourses; }
+
+		void SetStudentID(int id) { studentID = id; }
+		bool AddCourse(int course, int section = 0);
+		bool UpdateSection(int course, int section);
+
 
 	private:
 		int studentID;
-		std::vector<Course*> courses;
+		int coursesPerStudent;
+		int numberOfCourses;
+		Course *currentCourses;
 };

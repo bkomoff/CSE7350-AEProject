@@ -4,53 +4,61 @@
 
 #include "Student.h"
 
-Student::Student(int id) :
-	studentID(id)
+Student::Student() :
+	numberOfCourses(0)
 {}
 
 Student::~Student()
 {}
 
-bool Student::AddCourse(Course &c)
+void Student::EnrollStudent(int id, int courses)
 {
-	bool alreadyTakingCourse = false;
+	studentID = id;
+	coursesPerStudent = courses;
 
-	std::vector<Course*>::const_iterator it,
-										 itEnd = courses.end();
-	for (it = courses.begin(); it != itEnd && !alreadyTakingCourse; it++)
+	currentCourses = new Course[coursesPerStudent];
+	for (int i = 0; i < coursesPerStudent; i++)
 	{
-		Course *currentCourse = *it;
-		if ( currentCourse != NULL )
-		{ 
-			alreadyTakingCourse = currentCourse->GetSectionID() == c.GetSectionID() && currentCourse->GetCourseID() == c.GetCourseID();
-		}
+		currentCourses[i].SetSectionID(-1);
+		currentCourses[i].SetCourseID(-1);
 	}
-
-	if (!alreadyTakingCourse)
-	{ 
-		courses.push_back(&c);
-	}
-
-	return !alreadyTakingCourse;
 }
 
-void Student::RemoveCourse(Course &c)
+bool Student::AddCourse(int course, int section)
 {
-	bool deleteCourse = false;
+	bool found = false;
+
 	int i = 0;
-	for (auto &it : courses)
+	for (; i < numberOfCourses && !found; i++)
 	{
-		deleteCourse = (it->GetCourseID() == c.GetCourseID()) &&
-					   (it->GetSectionID() == c.GetSectionID());
-		if (deleteCourse)
-		{
-			break;
-		}
-		i++;
+		found = currentCourses[i].GetSectionID() == section &&
+				currentCourses[i].GetCourseID() == course;
 	}
 
-	if (deleteCourse)
+	if (!found)
 	{
-		courses.erase(courses.begin() + i);
+		currentCourses[i].SetCourseID(course);
+		currentCourses[i].SetSectionID(section);
+		numberOfCourses++;
 	}
+
+	return !found;
+}
+
+bool Student::UpdateSection(int course, int section)
+{
+	bool found = false;
+
+	int i = 0;
+	for (; i < numberOfCourses && !found; i++)
+	{
+		found = currentCourses[i].GetCourseID() == course;
+	}
+
+	if (found)
+	{
+		currentCourses[i].SetSectionID(section);
+	}
+
+	return !found;
 }

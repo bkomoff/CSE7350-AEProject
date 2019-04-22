@@ -2,7 +2,7 @@
 
 #include "HashTable.h"
 
- HashMap::HashMap(int size)
+ HashMap::HashMap(size_t size)
 {
 	 hashSize = size;
 
@@ -15,9 +15,9 @@
 
 }
 
- void HashMap::InsertNode(int  key, int value)
+ void HashMap::InsertNode(size_t  key, size_t value)
  {
-	 int hash = (key % hashSize);
+	 size_t hash = (key % hashSize);
 
 	 if (node[hash] == NULL)
 	 {
@@ -43,9 +43,9 @@
 	 }
  }
 
- int HashMap::GetValue(int  key)
+ size_t HashMap::GetValue(size_t  key)
  {
-	 int hash = (key % hashSize);
+	 size_t hash = (key % hashSize);
 
 	 HashNode *entry = node[hash];
 

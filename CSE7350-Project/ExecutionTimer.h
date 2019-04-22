@@ -19,12 +19,12 @@ public:
 	ExecutionTimer() = default;
 	~ExecutionTimer()
 	{
-		const auto end = Clock::now();
-		std::ostringstream strStream;
-		strStream << "Destructor Elapsed: "
-			<< std::chrono::duration_cast<Resolution>(end - mStart).count()
-			<< std::endl;
-		std::cout << strStream.str() << std::endl;
+		//const auto end = Clock::now();
+		//std::ostringstream strStream;
+		//strStream << "Destructor Elapsed: "
+		//	<< std::chrono::duration_cast<Resolution>(end - mStart).count()
+		//	<< std::endl;
+		//std::cout << strStream.str() << std::endl;
 	}
 
 	inline void stop()

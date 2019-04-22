@@ -3,12 +3,15 @@
 #include "Course.h"
 #include "ExecutionTimer.h"
 #include "HashTable.h"
+#include "HashSet.h"
 #include "Student.h"
 
 #include "SectionConflictResolver.h"
 
 SectionConflictResolver::SectionConflictResolver(int courses)
 {
+	std::cout << "SectionConflictResolver" << std::endl;
+
 	numberOfCourses = courses;
 
 	verticies = new NodeList[numberOfCourses];
@@ -22,27 +25,21 @@ SectionConflictResolver::SectionConflictResolver(int courses)
 SectionConflictResolver::~SectionConflictResolver()
 {}
 
-int SectionConflictResolver::CountDistinctConflicts(std::vector<Student*> &students)
+int SectionConflictResolver::CountDistinctConflicts(Student *students, int numberOfStudents)
 {
 	int numberOfDistinctSectionConflicts = 0;
-
 	HashMap *hash = new HashMap(numberOfCourses);
 
-	std::vector<Student*>::iterator st,
-									stEnd = students.end();
-	for (st = students.begin(); st != stEnd; ++st)
+	for (int s = 0; s < numberOfStudents; s++)
 	{
-		Student *currentStudent = *st;
-
 		int index = 1;
-		for (int courses = 0; courses < currentStudent->GetNumberOfCourses(); courses++)
+		for (int c = 0; c < students[s].GetNumberOfCourses(); c++)
 		{
-			int currentCourse = CombieInts(currentStudent->GetCourseList().at(courses)->GetCourseID(), currentStudent->GetCourseList().at(courses)->GetSectionID());
-
-			for (int i = index; i < currentStudent->GetNumberOfCourses(); i++)
-			{				
-				int nextCourse = CombieInts(currentStudent->GetCourseList().at(i)->GetCourseID(), currentStudent->GetCourseList().at(i)->GetSectionID());
-				int key = CombieInts(currentCourse, nextCourse);
+			size_t currentCourse = CombieInts(students[s].GetCourseList()[c].GetCourseID(), students[s].GetCourseList()[c].GetSectionID());
+			for (int i = index; i < students[s].GetNumberOfCourses(); i++)
+			{
+				size_t nextCourse = CombieInts(students[s].GetCourseList()[i].GetCourseID(), students[s].GetCourseList()[i].GetSectionID());
+				size_t key = CombieInts(currentCourse, nextCourse);
 				if (hash->GetValue(key) == -1)
 				{
 					hash->InsertNode(key, key);
@@ -60,27 +57,22 @@ int SectionConflictResolver::CountDistinctConflicts(std::vector<Student*> &stude
 	return numberOfDistinctSectionConflicts;
 }
 
-void SectionConflictResolver::CreateAdjancencyList(std::vector<Student*> &students)
+void SectionConflictResolver::CreateAdjancencyList(Student *students, int numberOfStudents)
 {
+
 	ExecutionTimer<std::chrono::milliseconds> timer;
 
 	HashMap *hash = new HashMap(numberOfCourses);
-
-	std::vector<Student*>::iterator st,
-		stEnd = students.end();
-	for (st = students.begin(); st != stEnd; ++st)
+	for (int s = 0; s < numberOfStudents; s++)
 	{
-		Student *currentStudent = *st;
-
 		int index = 1;
-		for (int courses = 0; courses < currentStudent->GetNumberOfCourses(); courses++)
+		for (int c = 0; c < students[s].GetNumberOfCourses(); c++)
 		{
-			int currentCourse = CombieInts(currentStudent->GetCourseList().at(courses)->GetCourseID(), currentStudent->GetCourseList().at(courses)->GetSectionID());
-
-			for (int i = index; i < currentStudent->GetNumberOfCourses(); i++)
+			size_t currentCourse = CombieInts(students[s].GetCourseList()[c].GetCourseID(), students[s].GetCourseList()[c].GetSectionID());
+			for (int i = index; i < students[s].GetNumberOfCourses(); i++)
 			{
-				int nextCourse = CombieInts(currentStudent->GetCourseList().at(i)->GetCourseID(), currentStudent->GetCourseList().at(i)->GetSectionID());
-				int key = CombieInts(currentCourse, nextCourse);
+				size_t nextCourse = CombieInts(students[s].GetCourseList()[i].GetCourseID(), students[s].GetCourseList()[i].GetSectionID());
+				size_t key = CombieInts(currentCourse, nextCourse);
 				if (hash->GetValue(key) == -1)
 				{
 					hash->InsertNode(key, key);
@@ -95,9 +87,10 @@ void SectionConflictResolver::CreateAdjancencyList(std::vector<Student*> &studen
 
 	delete hash;
 	hash = NULL;
+
 }
 
-void SectionConflictResolver::AddEdge(int src, int dest)
+void SectionConflictResolver::AddEdge(size_t src, size_t dest)
 {
 	Node* newNode = CreateNode(dest);
 	newNode->next = verticies[src].head;
@@ -108,7 +101,7 @@ void SectionConflictResolver::AddEdge(int src, int dest)
 	verticies[dest].head = newNode;
 }
 
-SectionConflictResolver::Node *SectionConflictResolver::CreateNode(int course)
+SectionConflictResolver::Node *SectionConflictResolver::CreateNode(size_t course)
 {
 	Node* newNode = new Node;
 	

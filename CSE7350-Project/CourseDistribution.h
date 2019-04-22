@@ -10,15 +10,15 @@ class CourseDistribution
 		CourseDistribution();
 		~CourseDistribution();
 
-		void UniformDistribution(std::vector<Student*> &students,
-								 std::vector<Course*> &courses, 
-								 int numberOfCoursesPerStudent);
-		void TwoTierDistribution(std::vector<Student*> &students,
-								 std::vector<Course*> &courses, 
-								 int numberOfCourses, 
-								 int numberOfCoursesPerStudent);
-		void FourTierDistribution(std::vector<Student*> &students,
-								  std::vector<Course*> &courses, 
-								  int numberOfCourses, 
-							      int numberOfCoursesPerStudent);
+		void UniformDistribution(Student *students,
+								 int numberOfStudents,
+								 int numberOfCourses);
+
+		void TwoTierDistribution(Student *students,
+								 int numberOfStudents,
+								 int numberOfCourses);
+
+		void FourTierDistribution(Student *students,
+								  int numberOfStudents,
+								  int numberOfCourses);
 };

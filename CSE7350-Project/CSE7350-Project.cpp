@@ -4,6 +4,7 @@
 
 #include "Course.h"
 #include "CourseDistribution.h"
+#include "CSVFile.h"
 #include "SectionCreator.h"
 #include "SectionConflictResolver.h"
 #include "Student.h"
@@ -14,6 +15,7 @@ void CommandLineInput(int &numberOfStudents,
 					  int &numberOfCourses,
 					  int &numberOfCoursesPerStudent,
 					  int &sectionSize);
+void Shuffle(Student *arr, size_t n);
 void OutputResults(int numberOfStudents,
 				   int numberOfCourses,
 	               int numberOfCoursesPerStudent,
@@ -24,101 +26,114 @@ void OutputResults(int numberOfStudents,
 
 int main()
 {
-	// 1) Input parameters
-	int numberOfStudents, numberOfCourses, numberOfCoursesPerStudent, sectionSize = 0;
-
-	CommandLineInput(numberOfStudents, 
-					 numberOfCourses, 
-					 numberOfCoursesPerStudent, 
-					 sectionSize);
-
-	std::vector<Student*> students;
-	for (int i = 0; i < numberOfStudents; i++)
+	bool execute = true;
+	while (execute)
 	{
-		students.push_back(new Student(i));
-	}
+		// 1) Input parameters
+		int numberOfStudents, numberOfCourses, numberOfCoursesPerStudent, sectionSize = 0;
 
-	std::vector<Course*> courses;
-	for (int i = 0; i < numberOfCourses; i++)
-	{
-		courses.push_back(new Course(0, i));
-	}
+		CommandLineInput(numberOfStudents,
+						 numberOfCourses,
+						 numberOfCoursesPerStudent,
+						 sectionSize);
 
-	// 1) Distribute classes to students (Inputs: # of students, # of courses, # of courses per student)
-	cout << "Select Distribution: " << endl;
-	cout << "1) Uniform Distribution" << endl;
-	cout << "2) Two-Tier Distribution" << endl;
-	cout << "3) Four-Tier Distribution" << endl;
-	cout << "4) Custom Distribution" << endl;
+		Student *students = new Student[numberOfStudents];
+		for (int s = 0; s < numberOfStudents; s++)
+		{
+			students[s].EnrollStudent(s, numberOfCoursesPerStudent);
+		}
 
-	int whichDistribution = 0;
-	cin >> whichDistribution;
+		Shuffle(students, numberOfStudents);
 
-	CourseDistribution distribution;
-	switch (whichDistribution)
-	{
+		// 1) Distribute classes to students (Inputs: # of students, # of courses, # of courses per student)
+		cout << "Select Distribution: " << endl;
+		cout << "1) Uniform Distribution" << endl;
+		cout << "2) Two-Tier Distribution" << endl;
+		cout << "3) Four-Tier Distribution" << endl;
+		cout << "4) Custom Distribution" << endl;
+
+		int whichDistribution = 0;
+		cin >> whichDistribution;
+
+		CourseDistribution distribution;
+		switch (whichDistribution)
+		{
 		case 1:
-			distribution.UniformDistribution(students, courses, numberOfCoursesPerStudent);
-		break;
+			distribution.UniformDistribution(students, numberOfStudents, numberOfCourses);
+			break;
 
 		case 2:
-			distribution.TwoTierDistribution(students, courses, numberOfCourses,numberOfCoursesPerStudent);
-		break;
+			distribution.TwoTierDistribution(students, numberOfStudents, numberOfCourses);
+			break;
 
 		case 3:
-			distribution.FourTierDistribution(students, courses, numberOfCourses, numberOfCoursesPerStudent);
-		break;
+			distribution.FourTierDistribution(students, numberOfStudents, numberOfCourses);
+			break;
 
 		default:
-		break;
+			break;
+		}
+
+		//Create Histogram
+		csvfile csv("Histogram.csv");
+		csv << "Course" << "Students" << endrow;
+		int *courses = new int[numberOfCourses];
+		for (int i = 0; i < numberOfCourses; i++)
+		{
+			courses[i] = 0;
+		}
+
+		for (int s = 0; s < numberOfStudents; s++)
+		{
+			for (int c = 0; c < students[s].GetNumberOfCourses(); c++)
+			{
+				courses[students[s].GetCourseList()[c].GetCourseID()]++;
+			}
+		}
+
+		for (int i = 0; i < numberOfCourses; i++)
+		{
+			csv << i << courses[i] << endrow;
+		}
+
+		// 2) Sort Courses into sections
+		SectionCreator creator;
+		creator.SimpleSectionSplit(students,
+								   numberOfStudents,
+								   numberOfCourses,
+							       static_cast<int>(sectionSize * 0.66),
+								   static_cast<int>(sectionSize * 1.33));
+
+		SectionConflictResolver resolver(numberOfCourses);
+		int distinctConflicts = resolver.CountDistinctConflicts(students, numberOfStudents);
+		resolver.CreateAdjancencyList(students, numberOfStudents);
+
+		OutputResults(numberOfStudents,
+					  numberOfCourses,
+				      numberOfCoursesPerStudent,
+					  sectionSize,
+					  whichDistribution,
+					  1,
+					  distinctConflicts);
+
+
+		delete[numberOfStudents] students;
+		students = NULL;
+
+		cout << "Conintue? (Q to exit)" << endl;
+		char anyKey;
+		cin >> anyKey;
+
+		switch (anyKey)
+		{
+			case 'q':
+				execute = false;
+				break;
+
+			default:
+				break;
+		}
 	}
-
-// 2) Sort Courses into sections
-	SectionCreator creator;
-	creator.SimpleSectionSplit(courses, static_cast<int>(sectionSize * 0.66), static_cast<int>(sectionSize * 1.33));
-
-//for (const auto st : students)
-//{
-//	cout << "Student: " << st->GetStudentId() << endl;
-//	for (const auto it : st->GetCourseList())
-//	{
-//		cout << "Course: " << it->GetCourseID() << " Section: " << it->GetSectionID() << endl;
-//	}
-//}
-
-	SectionConflictResolver resolver(courses.size());
-	int distinctConflicts = resolver.CountDistinctConflicts(students);
-	resolver.CreateAdjancencyList(students);
-
-	OutputResults(numberOfStudents,
-				  numberOfCourses,
-				  numberOfCoursesPerStudent,
-				  sectionSize,
-				  whichDistribution,
-				  1,
-			      distinctConflicts);
-
-	//for (const auto st : students)
-	//{
-	//	cout << "Student: " << st->GetStudentId() << endl;
-	//	for (const auto it : st->GetCourseList())
-	//	{
-	//		cout << "Section: " << it->GetSectionID() << " Course: " << it->GetCourseID() << endl;
-	//	}
-	//}
-	//for (const auto it : courses)
-	//{
-	//	cout << "Course: " << it->GetCourseID() <<  " Section: " << it->GetSectionID() << endl;
-	//	for (const auto st : it->GetStudentList())
-	//	{
-	//		cout << "Student: " << st->GetStudentId() << endl;
-	//	}
-	//}
-
-
-	cout << "Press Any Key to End" << endl;
-	char anyKey;
-	cin >> anyKey;
 
 	return 0;
 }
@@ -136,6 +151,22 @@ void CommandLineInput(int &numberOfStudents,
 	cin >> numberOfCoursesPerStudent;
 	cout << "Enter Section Size: " << endl;
 	cin >> sectionSize;
+}
+
+void Shuffle(Student *arr, size_t n)
+{
+	if (n > 1)
+	{
+		size_t i;
+		srand(time(NULL));
+		for (i = 0; i < n - 1; i++)
+		{
+			size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+			Student t = arr[j];
+			arr[j] = arr[i];
+			arr[i] = t;
+		}
+	}
 }
 
 void OutputResults(int numberOfStudents,
@@ -192,5 +223,4 @@ void OutputResults(int numberOfStudents,
 	int conflicts = numberOfCoursesPerStudent * (numberOfCoursesPerStudent - 1);
 	int total = conflicts / 2;
 	cout << "    Numer Of Total Pair-Wise Section Conflicts: " << numberOfStudents * total <<endl;
-
 }

@@ -8,42 +8,42 @@
 #include "CourseDistribution.h"
 
 CourseDistribution::CourseDistribution()
-{}
+{
+	std::cout << "CourseDistribution" << std::endl;
+}
 
 CourseDistribution::~CourseDistribution()
 {}
 
-void CourseDistribution::UniformDistribution(std::vector<Student*> &students,
-											 std::vector<Course*> &courses, 
-											 int numberOfCoursesPerStudent)
+void CourseDistribution::UniformDistribution(Student *students,
+											 int numberOfStudents,
+											 int numberOfCourses)
 {
+
 	ExecutionTimer<std::chrono::milliseconds> timer;
 	std::random_device rand_dev;
 	std::mt19937 generator(rand_dev());
-	std::uniform_int_distribution<> dis(0, courses.size() - 1);
+	std::uniform_int_distribution<> dis(0, numberOfCourses - 1);
 
-	for (auto &st : students)
+	for (int i = 0; i < numberOfStudents; i++)
 	{
-		while (st->GetNumberOfCourses() < numberOfCoursesPerStudent)
+		for ( int s = students[i].GetNumberOfCourses(); s < students[i].GetNumberOfCoursesPerStudent();)
 		{
 			int courseNumber = dis(generator);
 
-			if (st->AddCourse(*courses.at(courseNumber)))
+			if (students[i].AddCourse(courseNumber))
 			{
-				courses.at(courseNumber)->AddStudent(*st);
+				students[i].GetCourseList()[s].AddStudent();
+				s++;
 			}
 		}
 	}
 	timer.stop();
-
-	csvfile csv("UniformHistogram.csv");
-	csv << "Course" << "Students" << endrow;
 }
 
-void CourseDistribution::TwoTierDistribution(std::vector<Student*> &students,
-											 std::vector<Course*> &courses, 
-											 int numberOfCourses, 
-											 int numberOfCoursesPerStudent)
+void CourseDistribution::TwoTierDistribution(Student *students,
+											 int numberOfStudents,
+											 int numberOfCourses)
 {
 	std::default_random_engine generator;
 	std::bernoulli_distribution distribution(0.5);
@@ -54,9 +54,10 @@ void CourseDistribution::TwoTierDistribution(std::vector<Student*> &students,
 	int first10PercentOfCourses = numberOfCourses * 0.1;
 	int courseNumber = 0;
 	ExecutionTimer<std::chrono::milliseconds> timer;
-	for (auto &st : students)
+
+	for (int i = 0; i < numberOfStudents; i++)
 	{
-		while (st->GetNumberOfCourses() < numberOfCoursesPerStudent)
+		while (students[i].GetNumberOfCourses() < students[i].GetNumberOfCoursesPerStudent())
 		{
 			if (distribution(generator))
 			{
@@ -69,26 +70,15 @@ void CourseDistribution::TwoTierDistribution(std::vector<Student*> &students,
 				courseNumber = dis(generatorNumber);
 			}
 
-			if (st->AddCourse(*courses.at(courseNumber)))
-			{
-				courses.at(courseNumber)->AddStudent(*st);
-			}
+			students[i].AddCourse(courseNumber);
 		}
 	}
 	timer.stop();
-
-	csvfile csv("TwoTierHistogram.csv");
-	csv << "Course" << "Students" << endrow;
-	for (auto it : courses)
-	{
-		csv << it->GetCourseID() << it->GetNumberOfStudents() << endrow;
-	}
 }
 
-void CourseDistribution::FourTierDistribution(std::vector<Student*> &students,
-											  std::vector<Course*> &courses, 
-											  int numberOfCourses, 
-											  int numberOfCoursesPerStudent)
+void CourseDistribution::FourTierDistribution(Student *students,
+											  int numberOfStudents,
+											  int numberOfCourses)
 {
 	std::default_random_engine generator;
 	std::bernoulli_distribution fortyPercentdistribution(0.4);
@@ -104,9 +94,9 @@ void CourseDistribution::FourTierDistribution(std::vector<Student*> &students,
 	int thirdTwentyFivePercent = numberOfCourses * 0.75;
 
 	ExecutionTimer<std::chrono::milliseconds> timer;
-	for (auto &st : students)
+	for (int i = 0; i < numberOfStudents; i++)
 	{
-		while (st->GetNumberOfCourses() < numberOfCoursesPerStudent)
+		while (students[i].GetNumberOfCourses() < students[i].GetNumberOfCoursesPerStudent())
 		{
 			int courseNumber = -1;
 
@@ -131,20 +121,11 @@ void CourseDistribution::FourTierDistribution(std::vector<Student*> &students,
 				courseNumber = dis(generatorNumber);
 			}
 
-			if (courseNumber > 0 && st->AddCourse(*courses.at(courseNumber)))
+			if (courseNumber > 0 )
 			{
-				courses.at(courseNumber)->AddStudent(*st);
+				students[i].AddCourse(courseNumber);
 			}
 		}
 	}
 	timer.stop();
-
-	csvfile csv("FourTierHistogram.csv");
-	csv << "Course" << "Students" << endrow;
-	for (auto it : courses)
-	{
-		csv << it->GetCourseID() << it->GetNumberOfStudents() << endrow;
-	}
 }
-
-
