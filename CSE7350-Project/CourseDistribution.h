@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 
 class Course;
 class Student;
@@ -7,18 +6,20 @@ class Student;
 class CourseDistribution
 {
 	public:
-		CourseDistribution();
+		CourseDistribution(Student *studentList,
+						   Course *coursesList,
+						   int studentTotal,
+						   int courseTotal);
 		~CourseDistribution();
 
-		void UniformDistribution(Student *students,
-								 int numberOfStudents,
-								 int numberOfCourses);
+		void UniformDistribution();
 
-		void TwoTierDistribution(Student *students,
-								 int numberOfStudents,
-								 int numberOfCourses);
+		void TwoTierDistribution();
 
-		void FourTierDistribution(Student *students,
-								  int numberOfStudents,
-								  int numberOfCourses);
+		void FourTierDistribution();
+	private:
+		Student *students;
+		Course *courses;
+		int numberOfStudents;
+		int numberOfCourses;
 };

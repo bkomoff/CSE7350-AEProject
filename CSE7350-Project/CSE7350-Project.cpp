@@ -45,6 +45,14 @@ int main()
 
 		Shuffle(students, numberOfStudents);
 
+		Course *courses = new Course[numberOfCourses];
+		for (int currentCourse = 0; currentCourse < numberOfCourses; currentCourse++)
+		{
+			courses[currentCourse].SetCourseID(currentCourse);
+			courses[currentCourse].SetSectionID(0);
+		}
+
+
 		// 1) Distribute classes to students (Inputs: # of students, # of courses, # of courses per student)
 		cout << "Select Distribution: " << endl;
 		cout << "1) Uniform Distribution" << endl;
@@ -55,19 +63,19 @@ int main()
 		int whichDistribution = 0;
 		cin >> whichDistribution;
 
-		CourseDistribution distribution;
+		CourseDistribution distribution(students,courses,numberOfStudents,numberOfCourses);
 		switch (whichDistribution)
 		{
 		case 1:
-			distribution.UniformDistribution(students, numberOfStudents, numberOfCourses);
+			distribution.UniformDistribution();
 			break;
 
 		case 2:
-			distribution.TwoTierDistribution(students, numberOfStudents, numberOfCourses);
+			distribution.TwoTierDistribution();
 			break;
 
 		case 3:
-			distribution.FourTierDistribution(students, numberOfStudents, numberOfCourses);
+			distribution.FourTierDistribution();
 			break;
 
 		default:
@@ -77,32 +85,39 @@ int main()
 		//Create Histogram
 		csvfile csv("Histogram.csv");
 		csv << "Course" << "Students" << endrow;
-		int *courses = new int[numberOfCourses];
+		int *histCourse = new int[numberOfCourses];
 		for (int i = 0; i < numberOfCourses; i++)
 		{
-			courses[i] = 0;
+			histCourse[i] = 0;
 		}
 
 		for (int s = 0; s < numberOfStudents; s++)
 		{
 			for (int c = 0; c < students[s].GetNumberOfCourses(); c++)
 			{
-				courses[students[s].GetCourseList()[c].GetCourseID()]++;
+				histCourse[students[s].GetCourseList()[c].GetCourseID()]++;
 			}
 		}
 
 		for (int i = 0; i < numberOfCourses; i++)
 		{
-			csv << i << courses[i] << endrow;
+			csv << i << histCourse[i] << endrow;
 		}
 
 		// 2) Sort Courses into sections
-		SectionCreator creator;
-		creator.SimpleSectionSplit(students,
-								   numberOfStudents,
-								   numberOfCourses,
-							       static_cast<int>(sectionSize * 0.66),
-								   static_cast<int>(sectionSize * 1.33));
+		SectionCreator creator(students, courses, numberOfStudents, numberOfCourses, static_cast<int>(sectionSize * 0.66), static_cast<int>(sectionSize * 1.33));
+		creator.SimpleSectionSplit();
+
+		//for (int s = 0; s < numberOfStudents; s++)
+		//{
+		//	std::cout << "Student ID: " << students[s].GetStudentId() << std::endl;
+
+		//	for (int c = 0; c < students[s].GetNumberOfCourses(); c++)
+		//	{
+		//		std::cout << "Course ID: " << students[s].GetCourseList()[c].GetCourseID() << " Section ID: " << students[s].GetCourseList()[c].GetSectionID() << std::endl;
+		//	}
+		//}
+
 
 		SectionConflictResolver resolver(numberOfCourses);
 		int distinctConflicts = resolver.CountDistinctConflicts(students, numberOfStudents);
@@ -119,6 +134,9 @@ int main()
 
 		delete[numberOfStudents] students;
 		students = NULL;
+
+		delete[numberOfCourses] courses;
+		courses = NULL;
 
 		cout << "Conintue? (Q to exit)" << endl;
 		char anyKey;

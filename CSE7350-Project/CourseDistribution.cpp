@@ -7,7 +7,14 @@
 
 #include "CourseDistribution.h"
 
-CourseDistribution::CourseDistribution()
+CourseDistribution::CourseDistribution(Student *studentList,
+									   Course *coursesList,
+									   int studentTotal,
+									   int courseTotal):
+	students(studentList),
+	courses(coursesList),
+	numberOfStudents(studentTotal),
+	numberOfCourses(courseTotal)
 {
 	std::cout << "CourseDistribution" << std::endl;
 }
@@ -15,9 +22,7 @@ CourseDistribution::CourseDistribution()
 CourseDistribution::~CourseDistribution()
 {}
 
-void CourseDistribution::UniformDistribution(Student *students,
-											 int numberOfStudents,
-											 int numberOfCourses)
+void CourseDistribution::UniformDistribution()
 {
 
 	ExecutionTimer<std::chrono::milliseconds> timer;
@@ -34,6 +39,7 @@ void CourseDistribution::UniformDistribution(Student *students,
 			if (students[i].AddCourse(courseNumber))
 			{
 				students[i].GetCourseList()[s].AddStudent();
+				courses[courseNumber].AddStudent();
 				s++;
 			}
 		}
@@ -41,9 +47,7 @@ void CourseDistribution::UniformDistribution(Student *students,
 	timer.stop();
 }
 
-void CourseDistribution::TwoTierDistribution(Student *students,
-											 int numberOfStudents,
-											 int numberOfCourses)
+void CourseDistribution::TwoTierDistribution()
 {
 	std::default_random_engine generator;
 	std::bernoulli_distribution distribution(0.5);
@@ -71,14 +75,13 @@ void CourseDistribution::TwoTierDistribution(Student *students,
 			}
 
 			students[i].AddCourse(courseNumber);
+			courses[courseNumber].AddStudent();
 		}
 	}
 	timer.stop();
 }
 
-void CourseDistribution::FourTierDistribution(Student *students,
-											  int numberOfStudents,
-											  int numberOfCourses)
+void CourseDistribution::FourTierDistribution()
 {
 	std::default_random_engine generator;
 	std::bernoulli_distribution fortyPercentdistribution(0.4);
@@ -121,9 +124,10 @@ void CourseDistribution::FourTierDistribution(Student *students,
 				courseNumber = dis(generatorNumber);
 			}
 
-			if (courseNumber > 0 )
+			if (courseNumber > -1 )
 			{
 				students[i].AddCourse(courseNumber);
+				courses[courseNumber].AddStudent();
 			}
 		}
 	}

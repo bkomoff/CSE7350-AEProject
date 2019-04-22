@@ -6,7 +6,18 @@
 
 #include "SectionCreator.h"
 
-SectionCreator::SectionCreator()
+SectionCreator::SectionCreator(Student *studentList,
+							   Course *courseList,
+							   int studentTotal,
+						       int coursesTotal,
+							   int minSize,
+							   int maxSize):
+	students(studentList),
+	courses(courseList),
+	numberOfStudents(studentTotal),
+	numberOfCourses(coursesTotal),
+	minSectionSize(minSize),
+	maxSectionSize(maxSize)
 {
 	std::cout << "SectionCreator" << std::endl;
 }
@@ -14,37 +25,9 @@ SectionCreator::SectionCreator()
 SectionCreator::~SectionCreator()
 {}
 
-void SectionCreator::SimpleSectionSplit(Student *students,
-										int numberOfStudents,
-										int numberOfCourses,
-									    int minSectionSize, 
-										int maxSectionSize)
+void SectionCreator::SimpleSectionSplit()
 {
 	ExecutionTimer<std::chrono::milliseconds> timer;
-
-	// 1) Build up how many students in each course
-	Course *courses = new Course[numberOfCourses];
-
-	for (int currentCourse = 0; currentCourse < numberOfCourses; currentCourse++)
-	{
-		courses[currentCourse].SetCourseID(currentCourse);
-		courses[currentCourse].SetSectionID(0);
-
-		for (int s = 0; s < numberOfStudents; s++)
-		{
-			bool found = false;
-			for (int c = 0; c < students[s].GetNumberOfCourses() && !found; c++)
-			{
-				if (students[s].GetCourseList()[c].GetCourseID() == courses[currentCourse].GetCourseID())
-				{
-					courses[currentCourse].AddStudent();
-					found = true;
-				}
-			}
-		}
-	}
-
-	//2) Divide Students Amoung Courses
 	for (int c = 0; c < numberOfCourses; c++)
 	{
 		if (courses[c].GetNumberOfStudents() > maxSectionSize)

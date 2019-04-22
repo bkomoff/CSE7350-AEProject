@@ -6,14 +6,15 @@ class Student;
 class SectionCreator
 {
 	public:
-		SectionCreator();
+		SectionCreator(Student *studentList,
+					   Course *coursesList,
+					   int studentTotal,
+					   int courseTotal,
+					   int minize,
+					   int maxSize);
 		~SectionCreator();
 
-		void SimpleSectionSplit(Student *students,
-								int numberOfStudents,
-							    int numberOfCourses,
-								int minSectionSize,
-								int maxSectionSize);
+		void SimpleSectionSplit();
 
 /*
 		void SimpleSectionSplit(std::vector<Course*> &courses,
@@ -24,4 +25,11 @@ class SectionCreator
 			int minSectionSize,
 			int maxSectionSize);
 */
+	private:
+		Student *students;
+		Course *courses;
+		int numberOfStudents;
+		int numberOfCourses;
+		int minSectionSize;
+		int maxSectionSize;
 };
