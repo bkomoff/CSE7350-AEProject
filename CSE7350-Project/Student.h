@@ -18,8 +18,6 @@ class Student
 
 		void SetStudentID(int id) { studentID = id; }
 		bool AddCourse(int course, int section = 0);
-		bool UpdateSection(int course, int section);
-
 
 	private:
 		int studentID;

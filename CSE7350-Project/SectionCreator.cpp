@@ -25,8 +25,10 @@ SectionCreator::SectionCreator(Student *studentList,
 SectionCreator::~SectionCreator()
 {}
 
-void SectionCreator::SimpleSectionSplit()
+int SectionCreator::SimpleSectionSplit()
 {
+	int sectionsAdded = 0;
+
 	ExecutionTimer<std::chrono::milliseconds> timer;
 	for (int c = 0; c < numberOfCourses; c++)
 	{
@@ -48,22 +50,23 @@ void SectionCreator::SimpleSectionSplit()
 					bool found = false;
 					for (int c = 0; c < students[student].GetNumberOfCourses() && !found; c++)
 					{
-						if (students[student].GetCourseList()[c].GetCourseID() == courses[c].GetCourseID() &&
-							students[student].GetCourseList()[c].GetSectionID() != section)
+						if (students[student].GetCourseList()[c].GetCourseID() == courses[c].GetCourseID())
 						{
-							students[student].GetCourseList()[c].SetSectionID(section);
+							students[student].GetCourseList()[c].SetCourseID(students[student].GetCourseList()[c].GetCourseID() + section);
 							courses[c].RemoveStudent();
 							currentSectionSize++;
 							found = true;
 						}
 					}
-
 					nextSection = currentSectionSize >= minSectionSize;
 				}
+				sectionsAdded++;
 			}
 		}
 	}
 	timer.stop();
+
+	return sectionsAdded;
 }
 
 

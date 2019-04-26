@@ -33,18 +33,5 @@ class SectionConflictResolver
 
 	private:
 		int numberOfCourses;
-
-		size_t CombieInts(size_t a, size_t b)
-		{
-			// a = 1 b = 0 = 10
-			// a = 10 b = 0 = 100 
-			// a = 10 b = 987 = 10987
-			// a = 8 b = 547 = 8547
-			size_t times = 10;
-			while (times <= b)
-				times *= 10;
-			return a * times + b;
-		}
-
 		NodeList *verticies;
 };

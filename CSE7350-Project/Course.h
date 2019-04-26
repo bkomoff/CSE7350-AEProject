@@ -9,8 +9,6 @@ class Course
 		Course() { numberOfStudents = 0; };
 		~Course() {};
 
-		void SetSectionID(int id) { sectionID = id; }
-		int GetSectionID() const { return sectionID; }
 		void SetCourseID(int id) { courseID = id; }
 		int GetCourseID() const { return courseID; }
 		int GetNumberOfStudents() const { return numberOfStudents; }
@@ -20,6 +18,5 @@ class Course
 
 	private:
 		int courseID;
-		int sectionID;
 		int numberOfStudents;
 };

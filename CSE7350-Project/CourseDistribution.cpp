@@ -36,7 +36,7 @@ void CourseDistribution::UniformDistribution()
 		{
 			int courseNumber = dis(generator);
 
-			if (students[i].AddCourse(courseNumber))
+			if (students[i].AddCourse(courses[courseNumber].GetCourseID()))
 			{
 				students[i].GetCourseList()[s].AddStudent();
 				courses[courseNumber].AddStudent();
@@ -74,7 +74,7 @@ void CourseDistribution::TwoTierDistribution()
 				courseNumber = dis(generatorNumber);
 			}
 
-			students[i].AddCourse(courseNumber);
+			students[i].AddCourse((courses[courseNumber].GetCourseID()));
 			courses[courseNumber].AddStudent();
 		}
 	}
@@ -126,7 +126,7 @@ void CourseDistribution::FourTierDistribution()
 
 			if (courseNumber > -1 )
 			{
-				students[i].AddCourse(courseNumber);
+				students[i].AddCourse((courses[courseNumber].GetCourseID()));
 				courses[courseNumber].AddStudent();
 			}
 		}

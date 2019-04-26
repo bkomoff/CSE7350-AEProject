@@ -3,7 +3,6 @@
 #include "Course.h"
 #include "ExecutionTimer.h"
 #include "HashTable.h"
-#include "HashSet.h"
 #include "Student.h"
 
 #include "SectionConflictResolver.h"
@@ -35,15 +34,14 @@ int SectionConflictResolver::CountDistinctConflicts(Student *students, int numbe
 		int index = 1;
 		for (int c = 0; c < students[s].GetNumberOfCourses(); c++)
 		{
-			size_t currentCourse = CombieInts(students[s].GetCourseList()[c].GetCourseID(), students[s].GetCourseList()[c].GetSectionID());
+			size_t currentCourse = students[s].GetCourseList()[c].GetCourseID();
 			for (int i = index; i < students[s].GetNumberOfCourses(); i++)
 			{
-				size_t nextCourse = CombieInts(students[s].GetCourseList()[i].GetCourseID(), students[s].GetCourseList()[i].GetSectionID());
-				size_t key = CombieInts(currentCourse, nextCourse);
-				if (hash->GetValue(key) == -1)
+				size_t nextCourse = students[s].GetCourseList()[i].GetCourseID();
+				if (hash->GetValue(currentCourse) == -1 || hash->GetValue(nextCourse) == -1)
 				{
-					hash->InsertNode(key, key);
-					hash->InsertNode(CombieInts(nextCourse, currentCourse), CombieInts(nextCourse, currentCourse));
+					hash->InsertNode(currentCourse, nextCourse);
+					hash->InsertNode(nextCourse, currentCourse);
 					numberOfDistinctSectionConflicts++;
 				}
 			}
@@ -68,15 +66,14 @@ void SectionConflictResolver::CreateAdjancencyList(Student *students, int number
 		int index = 1;
 		for (int c = 0; c < students[s].GetNumberOfCourses(); c++)
 		{
-			size_t currentCourse = CombieInts(students[s].GetCourseList()[c].GetCourseID(), students[s].GetCourseList()[c].GetSectionID());
+			size_t currentCourse = students[s].GetCourseList()[c].GetCourseID();
 			for (int i = index; i < students[s].GetNumberOfCourses(); i++)
 			{
-				size_t nextCourse = CombieInts(students[s].GetCourseList()[i].GetCourseID(), students[s].GetCourseList()[i].GetSectionID());
-				size_t key = CombieInts(currentCourse, nextCourse);
-				if (hash->GetValue(key) == -1)
+				size_t nextCourse = students[s].GetCourseList()[i].GetCourseID();
+				if (hash->GetValue(currentCourse) == -1 || hash->GetValue(nextCourse) == -1)
 				{
-					hash->InsertNode(key, key);
-					hash->InsertNode(CombieInts(nextCourse, currentCourse), CombieInts(nextCourse, currentCourse));
+					hash->InsertNode(currentCourse, nextCourse);
+					hash->InsertNode(nextCourse, currentCourse);
 					this->AddEdge(currentCourse, nextCourse);
 				}
 			}
@@ -115,14 +112,16 @@ void SectionConflictResolver::PrintNodes()
 {
 	for (int i = 0; i < numberOfCourses; ++i)
 	{
-		Node *crawl = verticies[i].head;
-		std::cout << "Vertex: " << i << std::endl;
-		std::cout << "Head: ";
-		while (crawl)
+		if (verticies[i].head != NULL)
 		{
-			std::cout << " -> " << crawl->course;
-			crawl = crawl->next;
+			Node *crawl = verticies[i].head;
+			std::cout << "Vertex: " << i;
+			while (crawl)
+			{
+				std::cout << " -> " << crawl->course;
+				crawl = crawl->next;
+			}
+			std::cout << std::endl;
 		}
-		std::cout << std::endl;
 	}
 }

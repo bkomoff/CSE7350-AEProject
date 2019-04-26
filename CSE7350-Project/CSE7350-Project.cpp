@@ -46,10 +46,11 @@ int main()
 		Shuffle(students, numberOfStudents);
 
 		Course *courses = new Course[numberOfCourses];
+		int c = 1000;
 		for (int currentCourse = 0; currentCourse < numberOfCourses; currentCourse++)
 		{
-			courses[currentCourse].SetCourseID(currentCourse);
-			courses[currentCourse].SetSectionID(0);
+			courses[currentCourse].SetCourseID(c);
+			c += 1000;
 		}
 
 
@@ -85,8 +86,8 @@ int main()
 		//Create Histogram
 		csvfile csv("Histogram.csv");
 		csv << "Course" << "Students" << endrow;
-		int *histCourse = new int[numberOfCourses];
-		for (int i = 0; i < numberOfCourses; i++)
+		int *histCourse = new int[numberOfCourses * 1000];
+		for (int i = 0; i < numberOfCourses * 1000; i++)
 		{
 			histCourse[i] = 0;
 		}
@@ -99,27 +100,19 @@ int main()
 			}
 		}
 
-		for (int i = 0; i < numberOfCourses; i++)
+		for (int i = 0; i < numberOfCourses * 1000; i++)
 		{
-			csv << i << histCourse[i] << endrow;
+			if ( histCourse[i] > 0 )
+			{ 
+				csv << i << histCourse[i] << endrow;
+			}
 		}
 
 		// 2) Sort Courses into sections
 		SectionCreator creator(students, courses, numberOfStudents, numberOfCourses, static_cast<int>(sectionSize * 0.66), static_cast<int>(sectionSize * 1.33));
-		creator.SimpleSectionSplit();
+		int sectionsAdded = creator.SimpleSectionSplit();
 
-		//for (int s = 0; s < numberOfStudents; s++)
-		//{
-		//	std::cout << "Student ID: " << students[s].GetStudentId() << std::endl;
-
-		//	for (int c = 0; c < students[s].GetNumberOfCourses(); c++)
-		//	{
-		//		std::cout << "Course ID: " << students[s].GetCourseList()[c].GetCourseID() << " Section ID: " << students[s].GetCourseList()[c].GetSectionID() << std::endl;
-		//	}
-		//}
-
-
-		SectionConflictResolver resolver(numberOfCourses);
+		SectionConflictResolver resolver(numberOfCourses * 1000);
 		int distinctConflicts = resolver.CountDistinctConflicts(students, numberOfStudents);
 		resolver.CreateAdjancencyList(students, numberOfStudents);
 

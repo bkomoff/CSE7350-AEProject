@@ -14,7 +14,7 @@ class SectionCreator
 					   int maxSize);
 		~SectionCreator();
 
-		void SimpleSectionSplit();
+		int SimpleSectionSplit();
 
 /*
 		void SimpleSectionSplit(std::vector<Course*> &courses,
