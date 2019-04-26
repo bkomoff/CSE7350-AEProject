@@ -163,6 +163,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="SectionConflictResolver.h" />
     <ClInclude Include="SectionCreator.h" />
+    <ClInclude Include="SmallestVertexOrdering.h" />
     <ClInclude Include="Student.h" />
   </ItemGroup>
   <ItemGroup>
