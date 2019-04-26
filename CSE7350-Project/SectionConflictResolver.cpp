@@ -1,5 +1,6 @@
 #include "pch.h"
 
+#include "AdjacencyList.h"
 #include "Course.h"
 #include "ExecutionTimer.h"
 #include "HashTable.h"
@@ -11,14 +12,16 @@ SectionConflictResolver::SectionConflictResolver(int courses)
 {
 	std::cout << "SectionConflictResolver" << std::endl;
 
-	numberOfCourses = courses;
+	list = new AdjacencyList(courses);
 
-	verticies = new NodeList[numberOfCourses];
+	//numberOfCourses = courses;
 
-	for (int i = 0; i < numberOfCourses; i++)
-	{
-		verticies[i].head = NULL;
-	}
+	//verticies = new NodeList[numberOfCourses];
+
+	//for (int i = 0; i < numberOfCourses; i++)
+	//{
+	//	verticies[i].head = NULL;
+	//}
 }
 
 SectionConflictResolver::~SectionConflictResolver()
@@ -74,7 +77,7 @@ void SectionConflictResolver::CreateAdjancencyList(Student *students, int number
 				{
 					hash->InsertNode(currentCourse, nextCourse);
 					hash->InsertNode(nextCourse, currentCourse);
-					this->AddEdge(currentCourse, nextCourse);
+//					this->AddEdge(currentCourse, nextCourse);
 				}
 			}
 			index++;
@@ -110,18 +113,18 @@ SectionConflictResolver::Node *SectionConflictResolver::CreateNode(size_t course
 
 void SectionConflictResolver::PrintNodes()
 {
-	for (int i = 0; i < numberOfCourses; ++i)
-	{
-		if (verticies[i].head != NULL)
-		{
-			Node *crawl = verticies[i].head;
-			std::cout << "Vertex: " << i;
-			while (crawl)
-			{
-				std::cout << " -> " << crawl->course;
-				crawl = crawl->next;
-			}
-			std::cout << std::endl;
-		}
-	}
+	//for (int i = 0; i < numberOfCourses; ++i)
+	//{
+	//	if (verticies[i].head != NULL)
+	//	{
+	//		Node *crawl = verticies[i].head;
+	//		std::cout << "Vertex: " << i;
+	//		while (crawl)
+	//		{
+	//			std::cout << " -> " << crawl->course;
+	//			crawl = crawl->next;
+	//		}
+	//		std::cout << std::endl;
+	//	}
+	//}
 }

@@ -1,9 +1,6 @@
 #pragma once
 
-#include <list>
-#include <vector>
-
-class Course;
+class AdjacencyList;
 class Student;
 
 class SectionConflictResolver
@@ -34,4 +31,5 @@ class SectionConflictResolver
 	private:
 		int numberOfCourses;
 		NodeList *verticies;
+		AdjacencyList *list;
 };

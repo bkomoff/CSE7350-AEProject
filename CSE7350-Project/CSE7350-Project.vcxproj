@@ -160,6 +160,7 @@
     <ClInclude Include="CourseDistribution.h" />
     <ClInclude Include="ExecutionTimer.h" />
     <ClInclude Include="HashTable.h" />
+    <ClInclude Include="AdjacencyList.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SectionConflictResolver.h" />
     <ClInclude Include="SectionCreator.h" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Student.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AdjacencyList.cpp" />
     <ClCompile Include="CourseDistribution.cpp" />
     <ClCompile Include="CSE7350-Project.cpp" />
     <ClCompile Include="HashTable.cpp" />
