@@ -12,16 +12,8 @@ SectionConflictResolver::SectionConflictResolver(int courses)
 {
 	std::cout << "SectionConflictResolver" << std::endl;
 
-	list = new AdjacencyList(courses);
-
-	//numberOfCourses = courses;
-
-	//verticies = new NodeList[numberOfCourses];
-
-	//for (int i = 0; i < numberOfCourses; i++)
-	//{
-	//	verticies[i].head = NULL;
-	//}
+	numberOfCourses = courses;
+	list = new AdjacencyList(numberOfCourses);
 }
 
 SectionConflictResolver::~SectionConflictResolver()
@@ -30,6 +22,7 @@ SectionConflictResolver::~SectionConflictResolver()
 int SectionConflictResolver::CountDistinctConflicts(Student *students, int numberOfStudents)
 {
 	int numberOfDistinctSectionConflicts = 0;
+
 	HashMap *hash = new HashMap(numberOfCourses);
 
 	for (int s = 0; s < numberOfStudents; s++)
@@ -41,6 +34,7 @@ int SectionConflictResolver::CountDistinctConflicts(Student *students, int numbe
 			for (int i = index; i < students[s].GetNumberOfCourses(); i++)
 			{
 				size_t nextCourse = students[s].GetCourseList()[i].GetCourseID();
+
 				if (hash->GetValue(currentCourse) == -1 || hash->GetValue(nextCourse) == -1)
 				{
 					hash->InsertNode(currentCourse, nextCourse);
@@ -60,10 +54,8 @@ int SectionConflictResolver::CountDistinctConflicts(Student *students, int numbe
 
 void SectionConflictResolver::CreateAdjancencyList(Student *students, int numberOfStudents)
 {
-
 	ExecutionTimer<std::chrono::milliseconds> timer;
 
-	HashMap *hash = new HashMap(numberOfCourses);
 	for (int s = 0; s < numberOfStudents; s++)
 	{
 		int index = 1;
@@ -73,58 +65,20 @@ void SectionConflictResolver::CreateAdjancencyList(Student *students, int number
 			for (int i = index; i < students[s].GetNumberOfCourses(); i++)
 			{
 				size_t nextCourse = students[s].GetCourseList()[i].GetCourseID();
-				if (hash->GetValue(currentCourse) == -1 || hash->GetValue(nextCourse) == -1)
-				{
-					hash->InsertNode(currentCourse, nextCourse);
-					hash->InsertNode(nextCourse, currentCourse);
-//					this->AddEdge(currentCourse, nextCourse);
-				}
+				list->AddEdge(currentCourse, nextCourse);
 			}
 			index++;
 		}
 	}
 	timer.stop();
-
-	delete hash;
-	hash = NULL;
-
 }
 
-void SectionConflictResolver::AddEdge(size_t src, size_t dest)
+void SectionConflictResolver::RemoveConflicts()
 {
-	Node* newNode = CreateNode(dest);
-	newNode->next = verticies[src].head;
-	verticies[src].head = newNode;
 
-	newNode = CreateNode(src);
-	newNode->next = verticies[dest].head;
-	verticies[dest].head = newNode;
-}
-
-SectionConflictResolver::Node *SectionConflictResolver::CreateNode(size_t course)
-{
-	Node* newNode = new Node;
-	
-	newNode->course = course;
-	newNode->next = NULL;
-
-	return newNode;
 }
 
 void SectionConflictResolver::PrintNodes()
 {
-	//for (int i = 0; i < numberOfCourses; ++i)
-	//{
-	//	if (verticies[i].head != NULL)
-	//	{
-	//		Node *crawl = verticies[i].head;
-	//		std::cout << "Vertex: " << i;
-	//		while (crawl)
-	//		{
-	//			std::cout << " -> " << crawl->course;
-	//			crawl = crawl->next;
-	//		}
-	//		std::cout << std::endl;
-	//	}
-	//}
+	list->PrintNodes();
 }

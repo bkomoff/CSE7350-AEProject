@@ -23,17 +23,19 @@ class AdjacencyList
 		AdjacencyList(size_t sizeOfList);
 		~AdjacencyList() {};
 
-		void AddEdge(size_t src, size_t dest);
-		AdjacencyNode *CreateNode(size_t sectionCourse);
-
-		void PrintNodes();
-
-	private:
 		struct NodeList
 		{
 			AdjacencyNode *head;
 		};
 
+		NodeList *GetList() const { return list; }
+
+		AdjacencyNode *CreateNode(size_t sectionCourse);
+		void AddEdge(size_t src, size_t dest);
+		bool EdgeExist(size_t src, size_t dest);
+		void PrintNodes();
+
+	private:
 		size_t sizeOfList;
 		NodeList *list;
 };

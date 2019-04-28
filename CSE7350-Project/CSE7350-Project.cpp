@@ -82,7 +82,16 @@ int main()
 		default:
 			break;
 		}
-
+		for (int s = 0; s < numberOfStudents; s++)
+		{
+			std::cout << "Student ID: " << students[s].GetStudentId() << " ";
+			for (int c = 0; c < students[s].GetNumberOfCourses(); c++)
+			{
+				std::cout << " " << students[s].GetCourseList()[c].GetCourseID() << "";
+			}
+			std::cout << std::endl;
+		}
+/*
 		//Create Histogram
 		csvfile csv("Histogram.csv");
 		csv << "Course" << "Students" << endrow;
@@ -107,7 +116,7 @@ int main()
 				csv << i << histCourse[i] << endrow;
 			}
 		}
-
+*/
 		// 2) Sort Courses into sections
 		SectionCreator creator(students, courses, numberOfStudents, numberOfCourses, static_cast<int>(sectionSize * 0.66), static_cast<int>(sectionSize * 1.33));
 		int sectionsAdded = creator.SimpleSectionSplit();
@@ -115,6 +124,9 @@ int main()
 		SectionConflictResolver resolver(numberOfCourses * 1000);
 		int distinctConflicts = resolver.CountDistinctConflicts(students, numberOfStudents);
 		resolver.CreateAdjancencyList(students, numberOfStudents);
+		AdjacencyList *adjList = resolver.GetList();
+
+		resolver.PrintNodes();
 
 		OutputResults(numberOfStudents,
 					  numberOfCourses,
