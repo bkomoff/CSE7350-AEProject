@@ -6,13 +6,14 @@ class Vertex;
 class SmallestLastVertexOrdering
 {
 	public:
-		SmallestLastVertexOrdering(int length);
+		SmallestLastVertexOrdering(int length, AdjacencyList const *adj);
 		~SmallestLastVertexOrdering() {};
 
-		void CreateEdgeDegreeList(AdjacencyList const &currentSession);
+		void PrintVertices();
 
 	private:
+		AdjacencyList const *adjList;
 		int numberOfSessions;
-		Vertex *courses;
+		Vertex *vertices;
 
 };

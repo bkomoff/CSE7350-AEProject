@@ -1,6 +1,6 @@
 #pragma once
 
-class AdjacencyList;
+class AdjacencyNode;
 class DLL;
 
 class Vertex
@@ -10,12 +10,20 @@ class Vertex
 		~Vertex();
 
 		void SetCourse(int currentCourse) { course = currentCourse; }
-		void AddEdgeList(AdjacencyList *list) { edgeList = list; }
+		void AddEdgeList(AdjacencyNode *list) { edgeList = list; }
 		void SetEdgeDegree(int degree) { edgeDegree = degree; }
+		void SetSameEdgeVertices(DLL &list) { sameEdgeVertices = &list; }
+
+		int GetEdgeDegree() const { return edgeDegree; }
+		AdjacencyNode *GetEdgeList() const { return edgeList; }
+		DLL &GetSameEdgeVerticesDLL() const { return *sameEdgeVertices; }
+
+		void CreateSameDegreeVertexDLL(int session);
+		void PushSameDegreeVertexDLL(int session);
 
 	private:
 		int course;
-		AdjacencyList *edgeList;
+		AdjacencyNode *edgeList;
 		int edgeDegree;
 		DLL *sameEdgeVertices;
 };

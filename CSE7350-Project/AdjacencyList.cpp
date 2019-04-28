@@ -9,7 +9,7 @@ AdjacencyList::AdjacencyList(size_t sizeOfList)
 
 	for (int i = 0; i < sizeOfList; i++)
 	{
-		list[i].head = NULL;
+		list[i].head = nullptr;
 	}
 }
 
@@ -41,22 +41,38 @@ bool AdjacencyList::EdgeExist(size_t src, size_t dest)
 	return found;
 }
 
-void AdjacencyList::PrintNodes()
+int AdjacencyList::GetDegree(size_t index) const
+{
+	int degree = 0;
+	AdjacencyNode *crawl = list[index].head;
+	while (crawl != NULL)
+	{
+		degree++;
+		crawl = crawl->GetNext();
+	}
+
+
+	return degree;
+}
+
+void AdjacencyList::PrintNodes() const
 {
 	int count = 0;
 	for (int i = 0; i < sizeOfList; ++i)
 	{
 		if (list[i].head != NULL)
 		{
+			int numberOfDegrees = 0;
 			AdjacencyNode *crawl = list[i].head;
 			std::cout << "Vertex: " << i;
-			while (crawl)
+			while (crawl != NULL)
 			{
+				numberOfDegrees++;
 				count++;
 				std::cout << " -> " << crawl->GetData();
 				crawl = crawl->GetNext();
 			}
-			std::cout << std::endl;
+			std::cout << " Degree: " << numberOfDegrees << std::endl;
 		}
 	}
 	std::cout << "Adjacency List Length: " << count << std::endl;

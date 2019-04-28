@@ -2,11 +2,13 @@
 //
 #include "pch.h"
 
+#include "AdjacencyList.h"
 #include "Course.h"
 #include "CourseDistribution.h"
 #include "CSVFile.h"
 #include "SectionCreator.h"
 #include "SectionConflictResolver.h"
+#include "SmallestLastVertexOrdering.h"
 #include "Student.h"
 
 using namespace std;
@@ -43,14 +45,13 @@ int main()
 			students[s].EnrollStudent(s, numberOfCoursesPerStudent);
 		}
 
-		Shuffle(students, numberOfStudents);
+//		Shuffle(students, numberOfStudents);
 
 		Course *courses = new Course[numberOfCourses];
 		int c = 1000;
 		for (int currentCourse = 0; currentCourse < numberOfCourses; currentCourse++)
 		{
-			courses[currentCourse].SetCourseID(c);
-			c += 1000;
+			courses[currentCourse].SetCourseID(currentCourse);
 		}
 
 
@@ -82,6 +83,7 @@ int main()
 		default:
 			break;
 		}
+
 		for (int s = 0; s < numberOfStudents; s++)
 		{
 			std::cout << "Student ID: " << students[s].GetStudentId() << " ";
@@ -95,8 +97,8 @@ int main()
 		//Create Histogram
 		csvfile csv("Histogram.csv");
 		csv << "Course" << "Students" << endrow;
-		int *histCourse = new int[numberOfCourses * 1000];
-		for (int i = 0; i < numberOfCourses * 1000; i++)
+		int *histCourse = new int[numberOfCourses];
+		for (int i = 0; i < numberOfCourses; i++)
 		{
 			histCourse[i] = 0;
 		}
@@ -109,7 +111,7 @@ int main()
 			}
 		}
 
-		for (int i = 0; i < numberOfCourses * 1000; i++)
+		for (int i = 0; i < numberOfCourses; i++)
 		{
 			if ( histCourse[i] > 0 )
 			{ 
@@ -119,14 +121,16 @@ int main()
 */
 		// 2) Sort Courses into sections
 		SectionCreator creator(students, courses, numberOfStudents, numberOfCourses, static_cast<int>(sectionSize * 0.66), static_cast<int>(sectionSize * 1.33));
-		int sectionsAdded = creator.SimpleSectionSplit();
+		numberOfCourses += creator.SimpleSectionSplit();
 
-		SectionConflictResolver resolver(numberOfCourses * 1000);
+		SectionConflictResolver resolver(numberOfCourses);
 		int distinctConflicts = resolver.CountDistinctConflicts(students, numberOfStudents);
 		resolver.CreateAdjancencyList(students, numberOfStudents);
+
 		AdjacencyList *adjList = resolver.GetList();
 
-		resolver.PrintNodes();
+		SmallestLastVertexOrdering slvo(numberOfCourses, adjList);
+		slvo.PrintVertices();
 
 		OutputResults(numberOfStudents,
 					  numberOfCourses,
