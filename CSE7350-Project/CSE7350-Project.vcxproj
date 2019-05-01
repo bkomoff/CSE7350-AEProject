@@ -163,6 +163,7 @@
     <ClInclude Include="HashTable.h" />
     <ClInclude Include="AdjacencyList.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RandomOrdering.h" />
     <ClInclude Include="SectionConflictResolver.h" />
     <ClInclude Include="SectionCreator.h" />
     <ClInclude Include="SmallestLastVertexOrdering.h" />
@@ -184,7 +185,6 @@
     <ClCompile Include="SectionConflictResolver.cpp" />
     <ClCompile Include="SectionCreator.cpp" />
     <ClCompile Include="SmallestLastVertexOrdering.cpp" />
-    <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="Student.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

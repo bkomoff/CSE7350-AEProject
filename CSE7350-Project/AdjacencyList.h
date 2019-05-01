@@ -32,9 +32,10 @@ class AdjacencyList
 
 		AdjacencyNode *CreateNode(size_t sectionCourse);
 		void AddEdge(size_t src, size_t dest);
-		bool EdgeExist(size_t src, size_t dest);
 		int GetDegree(size_t index) const;
 		void PrintNodes() const;
+		size_t GetSizeOfList() const { return sizeOfList; }
+		bool CheckForDuplicates(size_t src, size_t dest);
 
 	private:
 		size_t sizeOfList;

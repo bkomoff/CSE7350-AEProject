@@ -27,7 +27,7 @@ class DLL
 		DLL();
 		~DLL();
 
-		void Push(int newData);
+		DLLNode *Push(int newData);
 		void Remove();
 
 		void PrintDLL() const;

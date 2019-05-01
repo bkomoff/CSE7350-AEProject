@@ -30,7 +30,7 @@ DLLNode *DLL::CreateDLLNode(int newData)
 	return node;
 }
 
-void DLL::Push(int newData)
+DLLNode *DLL::Push(int newData)
 {
 	DLLNode *newNode = CreateDLLNode(newData);
 	if (head == nullptr) // empty list
@@ -49,6 +49,8 @@ void DLL::Push(int newData)
 		this->tail->SetNext(newNode);
 		this->tail = newNode;
 	}
+
+	return newNode;
 }
 
 void DLL::Remove()
@@ -63,6 +65,7 @@ void DLL::Remove()
 			this->head->SetPrev(nullptr);
 		}
 		delete currentNode;
+		currentNode = NULL;
 	}
 }
 

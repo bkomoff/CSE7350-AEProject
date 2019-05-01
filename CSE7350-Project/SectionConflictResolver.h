@@ -11,7 +11,6 @@ class SectionConflictResolver
 
 		int CountDistinctConflicts(Student *students, int numberOfStudents);
 		void CreateAdjancencyList(Student *students, int numberOfStudents);
-		void RemoveConflicts();
 		void PrintNodes();
 
 		AdjacencyList *GetList() const { return list; }

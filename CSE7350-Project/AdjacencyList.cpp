@@ -25,20 +25,17 @@ AdjacencyNode *AdjacencyList::CreateNode(size_t sectionCourse)
 
 void AdjacencyList::AddEdge(size_t src, size_t dest)
 {
-	AdjacencyNode* newNode = CreateNode(dest);
-	newNode->SetNext(list[src].head);
-	list[src].head = newNode;
+	// Check for Duplicate
+	if (!CheckForDuplicates(src, dest))
+	{
+		AdjacencyNode* newNode = CreateNode(dest);
+		newNode->SetNext(list[src].head);
+		list[src].head = newNode;
 
-	newNode = CreateNode(src);
-	newNode->SetNext(list[dest].head);
-	list[dest].head = newNode;
-}
-
-bool AdjacencyList::EdgeExist(size_t src, size_t dest)
-{
-	bool found = false;
-
-	return found;
+		newNode = CreateNode(src);
+		newNode->SetNext(list[dest].head);
+		list[dest].head = newNode;
+	}
 }
 
 int AdjacencyList::GetDegree(size_t index) const
@@ -50,7 +47,6 @@ int AdjacencyList::GetDegree(size_t index) const
 		degree++;
 		crawl = crawl->GetNext();
 	}
-
 
 	return degree;
 }
@@ -76,4 +72,20 @@ void AdjacencyList::PrintNodes() const
 		}
 	}
 	std::cout << "Adjacency List Length: " << count << std::endl;
+}
+
+bool AdjacencyList::CheckForDuplicates(size_t src, size_t dest)
+{
+	bool found = false;
+	if (list[src].head != NULL)
+	{
+		AdjacencyNode *currentNode = list[src].head->GetNext();
+		while (currentNode != NULL && !found)
+		{
+			found = currentNode->GetData() == dest;
+			currentNode = currentNode->GetNext();
+		}
+	}
+
+	return found;
 }

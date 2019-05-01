@@ -54,6 +54,9 @@
     <ClInclude Include="SmallestLastVertexOrdering.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RandomOrdering.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -81,9 +84,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DLL.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SmallestLastVertexOrdering.cpp">

@@ -73,11 +73,6 @@ void SectionConflictResolver::CreateAdjancencyList(Student *students, int number
 	timer.stop();
 }
 
-void SectionConflictResolver::RemoveConflicts()
-{
-
-}
-
 void SectionConflictResolver::PrintNodes()
 {
 	list->PrintNodes();
