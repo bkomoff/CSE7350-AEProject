@@ -69,7 +69,6 @@ int SectionCreator::SimpleSectionSplit()
 	return sectionsAdded;
 }
 
-
 /*
 void SectionCreator::SimpleSectionSplit(std::vector<Course*> &courses, int minSectionSize, int maxSectionSize)
 {

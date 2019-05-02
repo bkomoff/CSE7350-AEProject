@@ -6,6 +6,7 @@
 #include "Course.h"
 #include "CourseDistribution.h"
 #include "CSVFile.h"
+#include "RandomOrdering.h"
 #include "SectionCreator.h"
 #include "SectionConflictResolver.h"
 #include "SmallestLastVertexOrdering.h"
@@ -48,7 +49,6 @@ int main()
 //		Shuffle(students, numberOfStudents);
 
 		Course *courses = new Course[numberOfCourses];
-		int c = 1000;
 		for (int currentCourse = 0; currentCourse < numberOfCourses; currentCourse++)
 		{
 			courses[currentCourse].SetCourseID(currentCourse);
@@ -118,10 +118,14 @@ int main()
 		resolver.CreateAdjancencyList(students, numberOfStudents);
 
 		AdjacencyList *adjList = resolver.GetList();
+		adjList->PrintNodes();
 
 		SmallestLastVertexOrdering slvo(numberOfCourses, adjList);
-		slvo.PrintVertices();
+//		slvo.PrintVertices();
 //		slvo.ExecuteAlgorithm();
+
+		RandomOrdering random(numberOfCourses, adjList);
+
 
 		OutputResults(numberOfStudents,
 					  numberOfCourses,

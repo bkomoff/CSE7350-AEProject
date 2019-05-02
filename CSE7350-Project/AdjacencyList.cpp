@@ -56,20 +56,17 @@ void AdjacencyList::PrintNodes() const
 	int count = 0;
 	for (int i = 0; i < sizeOfList; ++i)
 	{
-		if (list[i].head != NULL)
+		int numberOfDegrees = 0;
+		AdjacencyNode *crawl = list[i].head;
+		std::cout << "Vertex: " << i;
+		while (crawl != NULL)
 		{
-			int numberOfDegrees = 0;
-			AdjacencyNode *crawl = list[i].head;
-			std::cout << "Vertex: " << i;
-			while (crawl != NULL)
-			{
-				numberOfDegrees++;
-				count++;
-				std::cout << " -> " << crawl->GetData();
-				crawl = crawl->GetNext();
-			}
-			std::cout << " Degree: " << numberOfDegrees << std::endl;
+			numberOfDegrees++;
+			count++;
+			std::cout << " -> " << crawl->GetData();
+			crawl = crawl->GetNext();
 		}
+		std::cout << " Degree: " << numberOfDegrees << std::endl;
 	}
 	std::cout << "Adjacency List Length: " << count << std::endl;
 }
